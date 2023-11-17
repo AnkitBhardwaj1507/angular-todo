@@ -1,0 +1,57 @@
+<div class="container">
+
+    <h1>To-Do Application</h1>
+
+    <hr>
+    <form (ngSubmit)="onSubmit(taskForm)" #taskForm="ngForm">
+        <div class="form-group">
+            <label for="task">Task</label>
+            <input type="text" class="form-control" id="task" placeholder="Enter task" ngModel name="task" required>
+            <small *ngIf="taskForm.invalid && taskForm.dirty" id="errorMessage" class="form-text text-danger">Required
+                field</small>
+        </div>
+
+        <button [disabled]="taskForm.invalid" id="submitButton" type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <hr>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Task</th>
+                <th scope="col">Completed</th>
+                <th scope="col">Actons</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let task of taskArray; index as i">
+                <td>
+                    <div *ngIf="task.isEdit">
+                        <input type="text" class="form-control" id="task" [(ngModel)]="task.taskName" name="task" required>
+                    </div>
+                    <div *ngIf="!task.isEdit" [ngClass]="{ line: task.isCompleted === true, unline: task.isCompleted === false }"> 
+                        {{task.taskName}}
+                    </div>
+                    
+                </td>
+
+                <td><input (change)="onCheck(i)" id="myCheckbox" type="checkbox"></td>
+
+                <td>
+                    <div *ngIf="task.isEdit">
+                        <button class="btn btn-success btn-sm mx-2" (click)="onUpdate(i)">Update</button>
+                        <button class="btn btn-warning btn-sm" (click)="task.isEdit=false">Cancel</button>
+                    </div>
+
+                    <div *ngIf="!task.isEdit">
+                        <button class="btn btn-info btn-sm mx-2" (click)="onEdit(i)">Edit</button>
+                        <button class="btn btn-danger btn-sm" (click)="onDelete(i)">Delete</button>
+                    </div>
+
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
